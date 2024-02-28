@@ -1,0 +1,109 @@
+{% extends 'Users/base.html' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card m-3">
+                    <div class="card-header">
+                        <span>Users</span>
+                        <span>
+                            <input type="button" id="create-group-button" class="btn btn-outline-primary" value="Create Group" onclick="selectedUsers()" data-toggle="modal" data-target="#exampleModal" disabled>
+                            <!-- </form> -->
+                        </span>
+                    </div>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                <span>Name : </span>
+                                <input type="text" id="group-name" value="" placeholder="Enter the name" onchange="AddGroupName()">
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" action="/group-create/">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="group_name" id="group-name-final">
+                                    <input type="hidden" name="group_participants" id="group_participants">
+                                    <input type="submit" class="btn btn-primary" id="final-group-create-btn" value="Create" disabled>
+                                </form>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card-body">
+                        {% for user in users %}
+                            <div class="m-3">
+                                <form method="post" action="/chat-create/">
+                                    {% csrf_token %}
+                                    <div style="display: inline;">
+                                        <span>
+                                            <input type="checkbox" class="users" data-value="{{ user.id }}" onchange="disableCreatebutton()">
+                                        </span>
+                                        <span style="margin-left: 0px;" class="m-2"><b>{{ user.username }} : </b></span>
+                                        <span style="margin-right: 0px;">
+                                            <input type="submit" class="btn btn-outline-success" value="Chat">
+                                        </span>
+                                    </div>
+                                    <input type="hidden" name="participants" value="{{ user.id|join:',' }}">
+                                    <hr>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function selectedUsers(){
+            let users = document.getElementsByClassName('users')
+            let user_ids = ""
+            for(let i=0; i<users.length; i++) {
+                if(users[i].checked == true){
+                    user_ids = user_ids + users[i].getAttribute('data-value') + ","                    
+                }
+            }
+            console.log(user_ids)
+            document.getElementById('group_participants').value = user_ids;
+        }
+    </script>
+    <script>
+        function AddGroupName(){
+            let value = document.getElementById('group-name').value
+            if (value.length > 0 ){
+                document.getElementById("final-group-create-btn").disabled = false;  
+            }
+            else{
+                document.getElementById("final-group-create-btn").disabled = true;  
+            }
+            document.getElementById('group-name-final').value = value
+        }
+    </script>
+    <script>
+        function disableCreatebutton(){
+            let users = document.getElementsByClassName('users')
+            let checked_users = 0
+            for(let i=0; i<users.length; i++) {
+                if(users[i].checked == true){
+                    checked_users+=1
+                }
+            }
+            if (checked_users>0){
+                document.getElementById('create-group-button').disabled = false
+            }
+            else {
+                document.getElementById('create-group-button').disabled = true
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="card m-2">
+                    <div class="card-header">Update Profile</div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="m-2">
+                                <span>Firstname : </span><input type="text" name="firstname" id="firstname"
+                                                             value="{{ user.first_name }}">
+                            </div>
+                            <div class="m-2">
+                                <span>Lastname : </span><input type="text" name="lastname" id="lastname"
+                                                            value="{{ user.last_name }}">
+                            </div>
+                            <div class="m-2"><span>Username : </span><input type="text" name="username"
+                                                                         value="{{ user.username }}"
+                                                                         disabled>
+                            </div>
+                            <div class="m-2"><span>Email : </span><input type="email" name="email" value="{{ user.email }}"
+                                                                      disabled></div>
+                            <div class="m-2"><span>Password : </span><input type="password" id="password"
+                                                                           name="password"></div>
+                            <div class="m-2"><span>Re-Type Password : </span><input type="password" id="password2"
+                                                                                   name="re_type_password">
+                            </div>
+                            <div class="m-2"><input type="submit" value="Submit" class="btn btn-outline-primary"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+{% endblock %}

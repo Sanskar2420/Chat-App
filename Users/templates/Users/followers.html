@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card m-2">
+                            <div class="card-header">Pending Request</div>
+                            <div class="card-body">
+                                {% if pending_users %}
+                                    {% for user in pending_users %}
+                                        <div class="m-2">
+                                            {{ user.request_by.username }}
+                                            <button type="button"
+                                                    onclick="followAction(1, {{ user.request_by.id }}, {{ request.user.id }})"
+                                                    class="btn btn-success">
+                                                Accept
+                                            </button>
+                                            <button type="button"
+                                                    onclick="followAction(0, {{ user.request_by.id }}, {{ request.user.id }})"
+                                                    class="btn btn-danger">
+                                                Reject
+                                            </button>
+                                        </div>
+                                        <hr>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        No Pending Request.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card m-2">
+                            <div class="card-header">Followers</div>
+                            <div class="card-body">
+                                {% if accepted_users %}
+                                    {% for accepted_user in accepted_users %}
+                                        <div class="m-2">
+                                            {{ accepted_user.request_by.username }}
+                                            <span class="alert alert-success">ACCEPTED</span>
+                                            <button type="button"
+                                                    onclick="followAction(0, {{ accepted_user.request_by.id }}, {{ request.user.id }})"
+                                                    class="btn btn-danger">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-danger">No Followers.</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function followAction(value, userId, requestUser) {
+            let data = {"value": value, "user_id": userId, "request_user": requestUser}
+            $.ajax({
+                "type": "POST",
+                "data": JSON.stringify(data),
+                "url": "/followers/",
+                success: function (response) {
+                    if (response.msg === "Success") {
+                        alert("Action Performed successfully")
+                        window.location.reload()
+                    } else {
+                        alert("Something Went Wrong")
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}

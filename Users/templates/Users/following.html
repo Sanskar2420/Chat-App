@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card m-2">
+                            <div class="card-header">Pending Requests</div>
+                            <div class="card-body">
+                                {% if pending_users %}
+                                    {% for user in pending_users %}
+                                        <div class="m-2">
+                                            {{ user.request_to.username }}
+                                            <button type="button"
+                                                    onclick="unfollowUser({{ user.request_to.id }}, `You have cancelled Request to follow to user.`)"
+                                                    class="btn btn-outline-danger">
+                                                Cancel Request
+                                            </button>
+                                        </div>
+                                        <hr>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        No Pending Request.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card m-2">
+                            <div class="card-header">Following</div>
+                            <div class="card-body">
+                                {% if accepted_users %}
+                                    {% for user in accepted_users %}
+                                        <div class="m-2">
+                                            {{ user.request_to.username }}
+                                            <button class="alert alert-success">ACCEPTED</button>
+                                            <button class="btn btn-danger"
+                                                    onclick="unfollowUser({{ user.request_to.id }}, `You have successfully unfollowed the user.`)">Unfollow
+                                            </button>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="alert alert-danger">No Following.</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function unfollowUser(userId, message) {
+            let data = {"user_id": userId}
+            $.ajax({
+                type: "POST",
+                data: data,
+                url: "/following/",
+                success: function (response) {
+                    if (response.msg === "Success") {
+                        alert(message)
+                        window.location.reload()
+                    } else {
+                        alert(response)
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}

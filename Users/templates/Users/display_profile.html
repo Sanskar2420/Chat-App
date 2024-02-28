@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        {{ user.username }}
+                    </div>
+                    <div class="card-body">
+                        <b>Firstname : {{ user.first_name }}</b>
+                        <hr>
+                        <b>Lastname : {{ user.last_name }}</b>
+                        <hr>
+                        <b>Email : {{ user.email }}</b>
+                        <hr>
+                        <b><a href="{% url 'followers' %}">Followers</a>: {{ followers|length }}</b>
+                        <hr>
+                        <b><a href="{% url 'following' %}">Following</a>: {{ following|length }}</b>
+                        <hr>
+                        <b><a href="{% url 'user-question' %}">Posted Question</a>: {{ questions|length }}</b>
+                        <hr>
+                        <b>Posted Answers: {{ answers|length }}</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

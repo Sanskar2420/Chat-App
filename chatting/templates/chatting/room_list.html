@@ -1,0 +1,33 @@
+{% extends 'Users/base.html' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        {% for room in rooms %}
+                            <div class="card-body m-2">
+                            {% if room.name %}
+                                <span>
+                                    <form method="DELETE" action="/chat/delete/{{ room.room_id }}">
+                                        <a href="{% url 'room' room.room_id %}" style="float: left;">{{ room.name }}</a>
+                                        <button type="submit" class="btn btn-outline-danger" style="float: right;" onclick="alert('Chat Room will be deleted.')"><i class="fa fa-trash"></i></button>
+                                    </form>
+                                </span>
+                            {% else %}
+                                <span>
+                                    <form method="DELETE" action="/chat/delete/{{ room.room_id }}">
+                                        <a href="{% url 'room' room.room_id %}" style="float: left;">{{ room.room_id }}</a>
+                                        <button type="submit" class="btn btn-outline-danger" style="float: right;"  onclick="alert('Chat Room will be deleted.')"><i class="fa fa-trash"></i></button>
+                                    </form>
+                                </span>
+                            {% endif %}
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
